@@ -64,7 +64,7 @@
 <details>
   <summary>Пример</summary>
   
-![day](img/corpus.png)
+![day](img/day.png)
 </details>
 
 ## faculty 
@@ -84,7 +84,7 @@
 <details>
   <summary>Пример</summary>
   
-![day](img/faculty.png)
+![faculty](img/faculty.png)
 </details>
 
 ## group 
@@ -115,5 +115,66 @@
 <details>
   <summary>Пример</summary>
   
-![day](img/group.png)
+![group](img/group.png)
+</details>
+
+## lesson 
+Названия дисциплин. 
+
+|Название|Тип|Длина|Беззнаковое|По умолчанию|Описание|
+|--------|---|-----|-----------|------------|--------|
+|**ID**|INT|10|Да|AUTO_INCREMENT|уникальный идентификатор|
+|**NAME**|VARCHAR|200|-|-|название дисциплины|
+
+<details>
+  <summary>Индексы</summary>
+  
+>**ID** - PRIMARY KEY
+</details>
+
+<details>
+  <summary>Пример</summary>
+  
+![lesson](img/lesson.png)
+</details>
+
+## level 
+Уровни обучения (бакалвриат, магистратура и т.п.). 
+
+|Название|Тип|Длина|Беззнаковое|По умолчанию|Описание|
+|--------|---|-----|-----------|------------|--------|
+|**ID**|INT|10|Да|AUTO_INCREMENT|уникальный идентификатор|
+|**NAME**|VARCHAR|200|-|-|название уровня|
+
+<details>
+  <summary>Индексы</summary>
+  
+>**ID** - PRIMARY KEY
+</details>
+
+<details>
+  <summary>Пример</summary>
+  
+![level](img/level.png)
+</details>
+
+## log 
+История запросов к API.
+
+|Название|Тип|Длина|Беззнаковое|По умолчанию|Описание|
+|--------|---|-----|-----------|------------|--------|
+|**ID**|INT|10|Да|AUTO_INCREMENT|уникальный идентификатор|
+|**ID_USER**|INT|10|Да|-|идентификатор пользователя, выполнившего запрос. Если пользователю было отказано в доступе - равен NULL|
+|**METHOD**|VARCHAR|6|-|-|название метода|
+
+<details>
+  <summary>Индексы</summary>
+  
+>**ID** - PRIMARY KEY
+</details>
+
+<details>
+  <summary>Пример</summary>
+  
+![log](img/log.png)
 </details>
