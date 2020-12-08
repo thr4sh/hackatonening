@@ -1,0 +1,315 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger ReST Article
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+
+# Paths supported by the server application
+paths:
+  /people:
+    get:
+      operationId: people.read_all
+      tags:
+        - People
+      summary: Read the entire list of people
+      description: Read the list of people
+      parameters:
+        - name: length
+          in: query
+          type: integer
+          description: Number of people to get from people
+          required: false
+        - name: offset
+          in: query
+          type: integer
+          description: Offset from beginning of list where to start gathering people
+          required: false
+      responses:
+        200:
+          description: Successfully read people list operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                lname:
+                  type: string
+                fname:
+                  type: string
+                timestamp:
+                  type: string
+                notes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      note_id:
+                        type: integer
+                      person_id:
+                        type: integer
+                      content:
+                        type: string
+                      timestamp:
+                        type: string
+
+    post:
+      operationId: people.create
+      tags:
+        - People
+      summary: Create a person and add it to the people list
+      description: Create a new person in the people list
+      parameters:
+        - name: person
+          in: body
+          description: Person to create
+          required: True
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: First name of person to create
+              lname:
+                type: string
+                description: Last name of person to create
+              notes:
+                type: array
+                description: An array of notes to show
+                items:
+                    type : string
+      responses:
+        201:
+          description: Successfully created person in list
+
+  /people/{person_id}:
+    get:
+      operationId: people.read_one
+      tags:
+        - People
+      summary: Read one person from the people list
+      description: Read one person from the people list
+      parameters:
+        - name: person_id
+          in: path
+          description: Last name of the person to get from the list
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read person from people list operation
+          schema:
+            type : object
+            properties:
+              fname:
+                type: string
+              lname:
+                type: string
+              timestamp:
+                type: string
+              notes:
+                type: array
+                items:
+                  type: string
+
+    put:
+      operationId: people.update
+      tags:
+        - People
+      summary: Update a person in the people list
+      description: Update a person in the people list
+      parameters:
+        - name : person_id
+          in : path
+          description: Person's id
+          type: string
+          required: true
+        - name: person
+          in: body
+          description : The Person
+          required: true
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+              lname:
+                type: string
+              notes:
+                type: array
+                items:
+                  type: string
+
+
+
+      responses:
+        200:
+          description: Successfully updated person in people list
+
+    delete:
+      operationId: people.delete
+      tags:
+        - People
+      summary: Delete a person from the people list
+      description: Delete a person
+      parameters:
+        - name: person_id
+          in: path
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully deleted a person from people list
+
+  /people/{person_id}/notes/:
+    get:
+      operationId: notes.read_all
+      tags:
+        - Notes
+      summary: Read the entire list of n0tes
+      description: Notes. All of them for a particular person
+      parameters:
+        - name: person_id
+          in: path
+          type: string
+          description: person id
+          required: true
+      responses:
+        200:
+          description: Successfully read note list operation
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                note_id:
+                  type: integer
+                person_id:
+                  type: integer
+                content:
+                  type: string
+                timestamp:
+                  type: string
+
+    put:
+      operationId: notes.create
+      tags:
+       - Notes
+      summary: Create  n0tes
+      description: Notes. Create all of them for a particular person
+      parameters:
+        - name: person_id
+          in: path
+          type: string
+          description: person id
+          required: true
+        - name: note
+          in: body
+          required: true
+          description: an array of notes
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                content:
+                  type: string
+                timestamp:
+                  type: string
+
+      responses:
+        200:
+          description: Successfully created notes
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                content:
+                  type: string
+                timestamp:
+                  type: string
+
+  /people/{person_id}/notes/{note_id}:
+    get:
+      operationId: notes.read_one
+      tags:
+        - Notes
+      summary: Read one note of a person
+      description: ^Same
+      parameters:
+        - name: person_id
+          in: path
+          description: Person
+          type: string
+          required: True
+        - name: note_id
+          in: path
+          description: Note
+          type: string
+          required: True
+
+
+
+
+      responses:
+        200:
+          description: Successfully read person from people list operation
+          schema:
+            type: object
+            properties:
+              content:
+                type: string
+              timestamp:
+                type: string
+
+    put:
+      operationId: notes.update
+      tags:
+        - People
+      summary: Update a note
+      description: ^
+      parameters:
+        - name: person_id
+          in: path
+          description: Person's id
+          type: string
+          required: True
+        - name: note_id
+          in: path
+          description: Note's id that is to change
+          type: string
+          required: True
+
+
+
+      responses:
+        200:
+          description: Successfully updated person in people list
+
+    delete:
+      operationId: notes.delete
+      tags:
+        - Notes
+      summary: ITS PRETTY OBVIOUS WHAT IT DOES, DOESN'T IT?
+      description: ^Same
+      parameters:
+        - name: person_id
+          in: path
+          description: Person's id
+          type: string
+          required: True
+        - name: note_id
+          in: path
+          description: Note's id
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully deleted a person from people list
