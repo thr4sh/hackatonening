@@ -3,7 +3,7 @@ from models import User, UserSchema
 from flask import (make_response, abort)
 from config import db
 from valid import gen_token, valid
-from logbd import log_access
+from logdb import log_access
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
@@ -19,21 +19,26 @@ def acq_token(user_id):
         us.token = gen_token()
         us.expiration = (datetime.strptime(str(us.expiration), "%Y-%m-%d %H:%M:%S") + timedelta(days = 30))
         db.session.commit
+        log_access(user_id, 200)
         u = UserSchema().dump(us)
         return u
     else:
+        log_access(user_id, 404)
         abort(
             404, f'Failed to locate a users id {user_id}'
         )
 def read_all(token):
     if not valid(token):
+        log_access(token, 403)
         abort(403, 'Phony token detected')
 
     sc = User.query.order_by(User.id).all()
     s = UserSchema(many = True)
     if sc is not None:
+        log_access(token, 200)
         return s.dump(sc)
     else:
+        log_access(token, 404)
         abort(404, "Not found")
 
 

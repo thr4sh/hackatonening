@@ -6,6 +6,15 @@ from valid import gen_token, valid
 
 
 def log_access(user_id, stat ):
-    lg = Log(id_user = user_id, method = request.method, status = stat, ip = request.remote_addr, url = request.url, time = datetime.now())
+    lid = str(int(Log.query.order_by(Log.id).all()[-1].id) + 1)
+
+    lg = Log(id = lid, id_user = user_id, method = request.method, status = stat, ip = request.remote_addr, url = request.url, time = datetime.now())
+    db.session.add(lg)
+    db.session.commit()
+
+def log_access(token, stat ):
+    lid = str(int(Log.query.order_by(Log.id).all()[-1].id) + 1)
+    res = User.query.filter(User.token == token).one_or_none()
+    lg = Log(id = lid, id_user = res.id, method = request.method, status = stat, ip = request.remote_addr, url = request.url, time = datetime.now())
     db.session.add(lg)
     db.session.commit()
