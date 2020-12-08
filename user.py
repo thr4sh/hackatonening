@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from models import User, UserSchema
 from flask import (make_response, abort)
 from config import db
@@ -17,6 +17,7 @@ def acq_token(user_id):
     if us is not None:
 
         us.token = gen_token()
+        us.expiration = (date.fromisoformat(us.expiration) + timedelta(days = 30)).strftime("%Y-%m-%d")
         db.session.commit
         return 200, UserSchema(us)
     else:

@@ -1,7 +1,8 @@
 from flask import render_template
 import connexion
 import random
-from config import connex_app
+from config import connex_app, app
+from valid import gen_token
 # Создадим экземпляр приложения
 #people're telling that two instances causes stupid crashes
 #app = connexion.App(__name__, specification_dir='./')
@@ -23,4 +24,6 @@ def home():
 
 # Если мы работаем в автономном режиме, запускаем приложение
 if __name__ == '__main__':
+    app.logger.info(str(gen_token()))
+
     connex_app.run(host='0.0.0.0', port=5000, debug=True)

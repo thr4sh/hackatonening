@@ -5,7 +5,7 @@ import hashlib
 
 
 def gen_token():
-    token = hashlib.md5(bytes(int(random * 10000000.0))).hexdigest()
+    token = hashlib.md5(bytes(random.randint(1, 10000000))).hexdigest()
     return token
 
 
