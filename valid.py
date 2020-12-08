@@ -13,8 +13,8 @@ def valid(tid, token):
     res = User.query.filter(User.id == tid).filter(User.token == token)
     if res is not None:
         print(res)
-        dt = date.fromisoformat(res.token)
-        if dt < datetime.now:
+        dt = datetime.strptime(res.token, "%Y-%m-%d %H:%M:%S")
+        if dt >= datetime.now:
             return False
 
 
@@ -25,11 +25,12 @@ def valid(tid, token):
     return res is not None
 
 def valid(token):
-    res = User.query.filter(User.token == token)
+    res = User.query.filter(User.token == token).one_or_none()
+    print(res)
     if res is not None:
-        print(res)
-        if date.fromisoformat(res.expiration) < date.today():
+        if res.expiration >= datetime.now():
             return True
 
+    print("Pizdec")
     return False
 

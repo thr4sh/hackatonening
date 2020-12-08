@@ -123,7 +123,7 @@ class Schedule(db.Model):
 
 
 #schemas start here
-class UserSchema(ma.SQLAlchemyAutoSchema):
+class UserSchema(ma.SQLAlchemySchema):
     class Meta:
         model = User
         sqla_session = db.session
@@ -133,6 +133,9 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     id = fields.Int()
     name = fields.String()
     login = fields.String()
+    password = fields.String()
+    token = fields.String()
+    expiration = fields.DateTime()
 
 #???
 class FacultySchema(ma.SQLAlchemyAutoSchema):

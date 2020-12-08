@@ -3,7 +3,7 @@ from models import User, UserSchema
 from flask import (make_response, abort)
 from config import db
 from valid import gen_token, valid
-
+from logbd import log_access
 
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
@@ -17,9 +17,10 @@ def acq_token(user_id):
     if us is not None:
 
         us.token = gen_token()
-        us.expiration = (date.fromisoformat(us.expiration) + timedelta(days = 30)).strftime("%Y-%m-%d")
+        us.expiration = (datetime.strptime(str(us.expiration), "%Y-%m-%d %H:%M:%S") + timedelta(days = 30))
         db.session.commit
-        return 200, UserSchema(us)
+        u = UserSchema().dump(us)
+        return u
     else:
         abort(
             404, f'Failed to locate a users id {user_id}'
@@ -29,9 +30,9 @@ def read_all(token):
         abort(403, 'Phony token detected')
 
     sc = User.query.order_by(User.id).all()
-    sc = UserSchema(sc, many=True)
-    if sc is None:
-        return 200, sc
+    s = UserSchema(many = True)
+    if sc is not None:
+        return s.dump(sc)
     else:
         abort(404, "Not found")
 
@@ -42,8 +43,8 @@ def read_one(token, user_id):
     if uz is not None:
         if uz.token != token:
             abort(401, 'Phony token detected')
-        schema = UserSchema(uz)
-        return schema
+        schema = UserSchema()
+        return schema.dump(uz)
     else:
         abort(400, f"User not found for Id: {user_id}")
 
@@ -62,12 +63,12 @@ def create(user):
 
     if existing is None:
         new = User(name = name, password = ps, login = lg, token = gen_token(), \
-                          expiration = (datetime.now() + timedelta(days = 30)).strftime(("%Y-%m-%d %H:%M:%S")))
-        schema = UserSchema(new)
+                          expiration = (datetime.now() + timedelta(days = 30)))
+        schema = UserSchema()
         db.session.add(new)
         db.session.commit()
 
-        return 201, schema
+        return schema.dump(new)
 
     else:
         abort(404, f'User {name} {lg} exists already')
@@ -87,9 +88,9 @@ def update(user, user_id, token):
         us.name = user.get('name')
         us.login = user.get('login')
         us.id = user.get('id')
-        sc = UserSchema(us)
+        sc = UserSchema()
         db.session.commit
-        return 201, sc
+        return sc.dump(us)
     else:
         abort(
             404, 'Failed to locate a users id {user_id}'
