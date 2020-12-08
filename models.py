@@ -21,7 +21,7 @@ class Faculty(db.Model):
 
 class Corpus(db.Model):
     __tablename__ = 'corpus'
-    id = db.Column('ID', db.Strig, primary_key = True, nullable = False)
+    id = db.Column('ID', db.String, primary_key = True, nullable = False)
     name = db.Column('NAME', db.String(200), nullable = False)
 
 class Group(db.Model):
@@ -30,9 +30,9 @@ class Group(db.Model):
     name = db.Column('NAME', db.String(50), nullable = False)
     course = db.Column('COURSE', db.String, nullable = False)
     url = db.Column('URL', db.String(200))
-    id_faculty = db.Column('ID_FACULTY', db.String, db.ForeignKey('faculty.id'), nullable = False)
-    id_structure = db.Column('ID_STRUCTURE', db.String, db.ForeignKey('structure.id'), nullable = False)
-    id_level = db.Column('ID_LEVEL', db.String, db.ForeignKey('level.id'), nullable = False)
+    id_faculty = db.Column('ID_FACULTY', db.String, db.ForeignKey('faculty.ID'), nullable = False)
+    id_structure = db.Column('ID_STRUCTURE', db.String, db.ForeignKey('structure.ID'), nullable = False)
+    id_level = db.Column('ID_LEVEL', db.String, db.ForeignKey('level.ID'), nullable = False)
     child_fac = db.relationship("Faculty", backref= "Group")
     child_struc = db.relationship("Structure", backref="Group")
     child_lev = db.relationship("Level", backref="Group")
@@ -47,9 +47,9 @@ class User(db.Model):
     expiration = db.Column('EXPIRATION', db.DateTime, nullable = False)
 
 class Log(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'log'
     id = db.Column('ID', db.String, primary_key=True, nullable=False)
-    id_user = db.Column('ID_USER', db.String, db.ForeignKey('user.id'), nullable=True)
+    id_user = db.Column('ID_USER', db.String, db.ForeignKey('user.ID'), nullable=True)
     method = db.Column('METHOD', db.String(6), nullable=False)
     url = db.Column('URL', db.String(200), nullable=False)
     status = db.Column('STATUS', db.String, nullable=False)
@@ -80,15 +80,22 @@ class Teacher(db.Model):
     __tablename__ = 'teacher'
     id = db.Column('ID', db.String, primary_key = True, nullable = False)
     name = db.Column('NAME', db.String(200), nullable = False)
-    children = db.relationship(
+    tsce = db.relationship(
         "Schedule",
-        secondary="TeacherSchedule",
-        back_populates="Teacher")
-
+        secondary="teacher_schedule",
+        back_populates="tchi")
+"""
 class TeacherSchedule(db.Model):
     __tablename__ = 'teacher_schedule'
     id_teacher = db.Column('ID_TEACHER', db.String, db.ForeignKey('lesson.id'), nullable=False)
     id_schedule = db.Column('ID_SCHEDULE', db.String, db.ForeignKey('lesson.id'), nullable=False)
+"""
+
+association_table = db.Table('teacher_schedule', db.Model.metadata,
+    db.Column('ID_TEACHER', db.String, db.ForeignKey('teacher.ID')),
+    db.Column('ID_SCHEDULE', db.String, db.ForeignKey('schedule.ID'))
+)
+
 
 class Time(db.Model):
     __tablename__ = 'time'
@@ -101,17 +108,17 @@ class Time(db.Model):
 class Schedule(db.Model):
     __tablename__ = 'schedule'
     id = db.Column('ID', db.String, primary_key=True, nullable=False)
-    id_lesson = db.Column('ID_LESSON', db.String, db.ForeignKey('lesson.id'), nullable=False)
+    id_lesson = db.Column('ID_LESSON', db.String, db.ForeignKey('lesson.ID'), nullable=False)
     id_day = db.Column('ID_DAY', db.String, nullable=False)
     id_group = db.Column('ID_GROUP', db.String, nullable=False)
     id_auditory = db.Column('ID_AUDITORY', db.String, nullable=False)
     id_time = db.Column('ID_TIME', db.String, nullable=False)
     week = db.Column('WEEK', db.String(1000), nullable=True)
 
-    children = db.relationship(
+    tchi = db.relationship(
         "Teacher",
-        secondary="TeacherSchedule",
-        back_populates="Schedule")
+        secondary="teacher_schedule",
+        back_populates="tsce")
 
 
 
@@ -122,6 +129,10 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         sqla_session = db.session
         include_relationships = True
         load_instance = True
+
+    id = fields.Int()
+    name = fields.String()
+    login = fields.String()
 
 #???
 class FacultySchema(ma.SQLAlchemyAutoSchema):

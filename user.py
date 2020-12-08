@@ -8,7 +8,21 @@ from valid import gen_token, valid
 def get_timestamp():
     return datetime.now().strftime(("%Y-%m-%d %H:%M:%S"))
 
+def acq_token(user_id):
+    us = (
+        User.query.filter(User.id == user_id)
+            .one_or_none()
+    )
 
+    if us is not None:
+
+        us.token = gen_token()
+        db.session.commit
+        return 200, UserSchema(us)
+    else:
+        abort(
+            404, f'Failed to locate a users id {user_id}'
+        )
 def read_all(token):
     if not valid(token):
         abort(403, 'Phony token detected')
@@ -68,11 +82,11 @@ def update(user, user_id, token):
         if us.token != token:
             abort(403, "Tokens didn't match")
 
-        qus = User()
-        qus.name = user.get('name')
-        qus.login = user.get('login')
-        qus.id = user.get('id')
-        sc = UserSchema(qus)
+
+        us.name = user.get('name')
+        us.login = user.get('login')
+        us.id = user.get('id')
+        sc = UserSchema(us)
         db.session.commit
         return 201, sc
     else:
