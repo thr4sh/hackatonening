@@ -6,7 +6,7 @@ from config import connex_app
 #app = connexion.App(__name__, specification_dir='./')
 
 # Прочитаем файл swagger.yml для настройки конечных точек
-connex_app.add_api('swagger.yml')
+connex_app.add_api('swagger2.yml')
 
 
 # Создадим маршрут URL в нашем приложении для "/"

@@ -37,7 +37,7 @@ Thumbs.db
 /.qmake.cache
 /.qmake.stash
 
-
+swaggerold.yml
 # qtcreator generated files
 *.pro.user*
 

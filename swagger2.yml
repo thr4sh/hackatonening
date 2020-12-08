@@ -1,0 +1,234 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Ni                                         ce
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /v1
+
+
+# Paths supported by the server application
+paths:
+  /users:
+    get:
+      operationId: user.read_all
+      tags:
+        - User
+      summary: Read the entire list of users
+      description: Read the list of users
+      parameters:
+        - name: token
+          in: query
+          type: string
+          required: true
+      responses:
+        400:
+          description: Bad request
+        401:
+          description: Unathorized
+        500:
+          description: Something went south at the server. Just try another time, it may work.
+        200:
+          description: Successfull read
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                login:
+                  type: string
+                name:
+                  type: string
+  /token/{user_id}:
+    get:
+      operationId: user.acq_token
+      tags:
+        - User
+      summary: Gen new token 4 30 days
+      description: Gen new token 4 30 days
+      parameters:
+        - name: password
+          in: query
+          type: string
+          required: true
+        - name: user_id
+          in: path
+          type: integer
+          required: true
+      responses:
+        400:
+          description: Bad request
+        401:
+          description: Unathorized. Wrong Pass
+        404:
+          description: Not found
+        500:
+          description: Something went south at the server. Just try another time, it may work.
+        200:
+          description: Thats the token
+          schema:
+            type: object
+              properties:
+                id:
+                  type: integer
+                login:
+                  type: string
+                name:
+                  type: string
+                token:
+                  type: string
+  user:
+    post:
+      operationId: user.create
+        tags:
+          - User
+        summary: New user
+        description: New user
+        parameters:
+          - name: user
+            in: body
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                login:
+                  type: string
+                password:
+                  type: string
+
+            required: true
+        responses:
+          400:
+            description: Bad request
+          401:
+            description: Unathorized
+          404:
+            description: Not found
+          500:
+            description: Something went south at the server. Just try another time, it may work.
+          201:
+            description: Added a new user
+            schema:
+              type: object
+                properties:
+                  id:
+                    type: integer
+                  login:
+                    type: string
+                  name:
+                    type: string
+                  token:
+                    type: string
+  /user/{user_id}:
+    get:
+      operationId: user.read_one
+        tags:
+          - User
+        summary: Get the requested user
+        description: Get the requested user
+        parameters:
+          - name: token
+            in: query
+            type: string
+            required: true
+          - name: user_id
+            in: path
+            type: integer
+            required: true
+        responses:
+          400:
+            description: Bad request
+          401:
+            description: Unauthorized
+          500:
+            description: Something went south at the server. Just try another time, it may work.
+          200:
+            description: Successfull read
+            type: object
+              properties:
+                id:
+                  type: integer
+                login:
+                  type: string
+                name:
+                  type: string
+    put:
+      operationId: user.update
+        tags:
+          - User
+        summary: New user
+        description: New user
+        parameters:
+          - name: token
+            in: query
+            type: string
+            required: true
+          - name: user_id
+            in: path
+            type: integer
+            required: true
+          - name: user
+            in: body
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                login:
+                  type: string
+                password:
+                  type: string
+            required: true
+        responses:
+          400:
+            description: Bad request
+          401:
+            description: Unathorized
+          403:
+            description: nice try, m8
+          404:
+            description: Not found
+          500:
+            description: Something went south at the server. Just try another time, it may work.
+          200:
+            description: Updated a user
+            schema:
+              type: object
+                properties:
+                  id:
+                    type: integer
+                  login:
+                    type: string
+                  name:
+                    type: string
+    delete:
+      operationId: user.delete
+        tags:
+          - User
+        summary: No user
+        description: No user
+        parameters:
+          - name: token
+            in: query
+            type: string
+            required: true
+          - name: user_id
+            in: path
+            type: integer
+            required: true
+        responses:
+          401:
+            description: Unathorized
+          403:
+            description: nice try, m8
+          404:
+            description: Not found
+          500:
+            description: Something went south at the server. Just try another time, it may work.
