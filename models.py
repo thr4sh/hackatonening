@@ -145,6 +145,21 @@ class FacultySchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
+
+class StructureSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Structure
+        sqla_session = db.session
+        include_relationships = True
+        load_instance = True
+
+class LevelSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Level
+        sqla_session = db.session
+        include_relationships = True
+        load_instance = True
+
 class TeacherSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Teacher
@@ -167,4 +182,9 @@ class ScheduleSchema(ma.SQLAlchemyAutoSchema):
         load_instance = True
     teachers = Nested('TeacherSchema', default= [], many = True)
 
-
+class GroupScheme(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Auditory
+        sqla_session = db.session
+        include_relationships = False
+        load_instance = True

@@ -4,8 +4,8 @@ from flask import (make_response, abort, request)
 from config import db
 from valid import gen_token, valid
 
-
-def log_access(user_id, stat ):
+#hacky af, i like it. image running this with 10^10 entries
+def log_access(user_id, token, stat ):
     lid = str(int(Log.query.order_by(Log.id).all()[-1].id) + 1)
 
     lg = Log(id = lid, id_user = user_id, method = request.method, status = stat, ip = request.remote_addr, url = request.url, time = datetime.now())

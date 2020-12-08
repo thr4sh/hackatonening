@@ -21,4 +21,4 @@ def home():
 if __name__ == '__main__':
     app.logger.info(str(gen_token()))
 
-    connex_app.run(host='0.0.0.0', port=8080, debug=True)
+    connex_app.run(host='0.0.0.0', port=5000, debug=True)

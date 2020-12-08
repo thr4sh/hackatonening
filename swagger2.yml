@@ -234,3 +234,164 @@ paths:
           description: Not found
         500:
           description: Something went south at the server. Just try another time, it may work.
+  /faculty:
+    get:
+      operationId: group.read_facs_all
+      tags:
+        - Faculty
+      summary: Facs all
+      description: Facs all
+      parameters:
+        - name: token
+          in: query
+          type: string
+          required: true
+      responses:
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        500:
+          description: Something went south at the server. Just try another time, it may work.
+        200:
+          description: Successfull readZ
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                login:
+                  type: string
+
+  /teacher:
+    get:
+      operationId: group.read_teachers
+      tags:
+        - Teachers
+      summary: Teachers all
+      description: teachers
+      parameters:
+        - name: token
+          in: query
+          type: string
+          required: true
+      responses:
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        500:
+          description: Something went south at the server. Just try another time, it may work.
+        200:
+          description: Successfull readZ of Teachers
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+
+  /auditory:
+    get:
+      operationId: group.read_auds
+      tags:
+        - Auditories
+      summary: Auditories all
+      description: Auditories
+      parameters:
+        - name: token
+          in: query
+          type: string
+          required: true
+      responses:
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        500:
+          description: Something went south at the server. Just try another time, it may work.
+        200:
+          description: Successfull readZ of Auditories
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+
+  /faculty/{faculty_id}:
+    get:
+      operationId: group.read_fac
+      tags:
+        - Faculty
+      summary: Fac
+      description: Fac
+      parameters:
+        - name: token
+          in: query
+          type: string
+          required: true
+        - name: faculty_id
+          in: path
+          type: integer
+          required: true
+      responses:
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        500:
+          description: Something went south at the server. Just try another time, it may work.
+        200:
+          description: Successfull read of one fac
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              structures:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    levels:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          groups:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                course:
+                                  type: string
+                                url:
+                                  type: string
+
+
+

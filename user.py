@@ -47,10 +47,13 @@ def read_one(token, user_id):
     uz = (User.query.filter(User.id == user_id).one_or_none())
     if uz is not None:
         if uz.token != token:
+            log_access(user_id, 401)
             abort(401, 'Phony token detected')
         schema = UserSchema()
+        log_access(user_id, 200)
         return schema.dump(uz)
     else:
+        log_access("NONE", 400)
         abort(400, f"User not found for Id: {user_id}")
 
 
@@ -73,9 +76,11 @@ def create(user):
         db.session.add(new)
         db.session.commit()
 
+        log_access(new.id, None, 404)
         return schema.dump(new)
 
     else:
+        log_access("NONE", 404)
         abort(404, f'User {name} {lg} exists already')
 
 
@@ -87,6 +92,7 @@ def update(user, user_id, token):
 
     if us is not None:
         if us.token != token:
+            log_access(user_id, None, 403)
             abort(403, "Tokens didn't match")
 
 
@@ -95,8 +101,10 @@ def update(user, user_id, token):
         us.id = user.get('id')
         sc = UserSchema()
         db.session.commit
+        log_access(user_id, None, 200)
         return sc.dump(us)
     else:
+        log_access(None, 200)
         abort(
             404, 'Failed to locate a users id {user_id}'
         )
@@ -110,11 +118,13 @@ def delete(user_id, token):
 
     if us is not None:
         if us.token != token:
+            log_access(user_id, None, 403)
             abort(403, "Tokens didn't match")
 
         db.session.delete(us)
         db.session.commit
     else:
+        log_access(None, 200)
         abort(
             404, 'Failed to locate a users id {user_id}'
         )
