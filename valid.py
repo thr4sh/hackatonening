@@ -19,4 +19,13 @@ def valid(tid, token):
 
     return res is not None
 
+def valid(token):
+    res = User.query.filter(User.token == token)
+    if res is not None:
+        print(res)
+    #if res is not None:
+    #    if date(res.expiration) < date.today():
+    #        return True
+
+    return res is not None
 
