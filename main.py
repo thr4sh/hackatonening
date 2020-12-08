@@ -17,7 +17,7 @@ def home():
     return render_template('home.html')
 
 
-# Если мы работаем в автономном режиме, запускаем приложение
+
 if __name__ == '__main__':
     app.logger.info(str(gen_token()))
 
