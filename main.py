@@ -1,5 +1,6 @@
 from flask import render_template
 import connexion
+import random
 from config import connex_app
 # Создадим экземпляр приложения
 #people're telling that two instances causes stupid crashes
@@ -8,7 +9,7 @@ from config import connex_app
 # Прочитаем файл swagger.yml для настройки конечных точек
 connex_app.add_api('swagger2.yml')
 
-
+random.seed()
 # Создадим маршрут URL в нашем приложении для "/"
 @connex_app.route('/')
 def home():
